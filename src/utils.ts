@@ -10,3 +10,12 @@ export function formattedToday(): string {
 
   return formatted;
 }
+
+// 円の半径計算
+export const calcBubbleRadius = (
+  content: string,
+  baseRadius: number,
+  growthFactor: number
+): number => {
+  return baseRadius + content.length * growthFactor;
+};

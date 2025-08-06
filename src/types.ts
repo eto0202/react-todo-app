@@ -8,9 +8,5 @@ export interface Todo {
   completedDate?: string;
   content: string;
   priority: Priority;
-  position: {
-    x: number;
-    y: number;
-    angle: number;
-  };
+  position: { x: number; y: number; angle: number } | null;
 }

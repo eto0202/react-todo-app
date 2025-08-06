@@ -1,6 +1,9 @@
+import { useState } from "react";
 import type { Todo } from "../types";
 import "./TodoCard.css";
 import * as Popover from "@radix-ui/react-popover";
+import { priorityStyles } from "../config";
+import { calcBubbleRadius } from "../utils";
 
 type TodoCardProps = {
   todo: Todo;
@@ -9,6 +12,19 @@ type TodoCardProps = {
 };
 
 export function TodoCard({ todo, onToggleComplete, onDelete }: TodoCardProps) {
+  const [open, setOpen] = useState(false);
+
+  // Todoの優先度に応じてスタイル設定を取得
+  const styleSettings = priorityStyles[todo.priority] || priorityStyles.medium;
+
+  const radius = calcBubbleRadius(
+    todo.content,
+    styleSettings.baseRadius,
+    styleSettings.growthFactor
+  );
+
+  const diameter = radius * 2;
+
   const position = todo.position || { x: 0, y: 0, angle: 0 };
   const cardStyle = {
     transform: `
@@ -18,9 +34,13 @@ export function TodoCard({ todo, onToggleComplete, onDelete }: TodoCardProps) {
       )
       rotate(${position.angle}rad)
     `,
+
+    width: `${diameter}px`,
+    height: `${diameter}px`,
   };
+
   return (
-    <Popover.Root>
+    <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
         className={`popover_trigger ${todo.completed ? "completed" : "incomplete"} priority_${
           todo.priority
@@ -39,16 +59,22 @@ export function TodoCard({ todo, onToggleComplete, onDelete }: TodoCardProps) {
               <p className="todo_completedDate_text">完了日 : </p>
               <p className="todo_completedDate_number">{todo.completedDate}</p>
             </div>
-            <div className="btn_container">
-              <button className="done_btn" type="button" onClick={() => onToggleComplete(todo.id)}>
-                {todo.completedText}
-              </button>
-              <img
-                className="delete_btn"
-                src="src\assets\delete_2_line.svg"
-                onClick={() => onDelete(todo.id)}
-              ></img>
-            </div>
+            <Popover.Close asChild>
+              <div className="btn_container">
+                <button
+                  className="done_btn"
+                  type="button"
+                  onClick={() => onToggleComplete(todo.id)}
+                >
+                  {todo.completedText}
+                </button>
+                <img
+                  className="delete_btn"
+                  src="src\assets\delete_2_line.svg"
+                  onClick={() => onDelete(todo.id)}
+                ></img>
+              </div>
+            </Popover.Close>
           </div>
         </Popover.Content>
       </Popover.Portal>

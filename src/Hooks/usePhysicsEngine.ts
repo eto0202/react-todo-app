@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 import Matter from "matter-js";
 import type { Todo, Priority } from "../types";
+import { calcBubbleRadius } from "../utils";
+import { priorityStyles } from "../config";
 
 type UsePhysicsEngineProps = {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -24,7 +26,13 @@ export function usePhysicsEngine({
   useEffect(() => {
     // observerAPIを設定
     const setup = (width: number, height: number) => {
-      const engine = Matter.Engine.create({ gravity: { y: 0.05 } });
+      const engine = Matter.Engine.create({
+        gravity: { y: 0.05 },
+        constraintIterations: 2,
+        positionIterations: 6,
+        velocityIterations: 4,
+      });
+
       matterInstanceRef.current = { engine };
 
       const walls = [
@@ -110,15 +118,31 @@ export function usePhysicsEngine({
   // containerRefが変わらない限り再生成しない。
   const createBubble = useCallback(
     (todo: Todo): Matter.Body => {
-      const initialX =
-        todo.position?.x || Math.random() * (containerRef.current?.clientWidth || 800);
-      const initialY = todo.position?.y || 50;
+      let initialX: number;
+      let initialY: number;
+      const container = containerRef.current;
 
-      const bubbleRadius = 30 + todo.content.length * 2;
+      if (todo.position === null && container) {
+        const centerX = container.clientWidth / 2;
+        const centerY = container.clientHeight / 2;
+
+        initialX = centerX + (Math.random() - 0.5) * 600;
+        initialY = centerY + (Math.random() - 0.5) * 10;
+      } else {
+        initialX = todo.position?.x || Math.random() * (container?.clientWidth || 800);
+        initialY = todo.position?.y || 50;
+      }
+
+      // Todoの優先度に応じてstyle設定を取得
+      const style = priorityStyles[todo.priority] || priorityStyles.medium;
+      const bubbleRadius = calcBubbleRadius(todo.content, style.baseRadius, style.growthFactor);
+
       const body = Matter.Bodies.circle(initialX, initialY, bubbleRadius, {
         label: `bubble-${todo.id}`,
         restitution: 0.8, // 反発係数
         frictionAir: 0.02, // 空気抵抗
+        // スロップ値。デフォルトは0.05。ボディの周りの薄い境界を指定し、そこでボディが他のボディにわずかに沈むことを許可する数。
+        slop: 0.01,
       });
 
       // matter.bodyオブジェクトにカスタムプロパティを設定。

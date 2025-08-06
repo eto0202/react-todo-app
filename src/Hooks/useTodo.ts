@@ -77,11 +77,7 @@ export function useTodos() {
       completed: false,
       completedText: "完了",
       priority: priority,
-      position: {
-        x: Math.random() * 500 + 150,
-        y: 50,
-        angle: 0,
-      },
+      position: null,
     };
 
     setTodoList((prevList) => [...prevList, newTodo]);
