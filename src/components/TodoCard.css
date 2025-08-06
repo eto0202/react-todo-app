@@ -1,0 +1,35 @@
+:root {
+  font-size: 16px;
+}
+
+.popover_trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 120px;
+  height: 120px;
+
+  background-color: transparent;
+  border: transparent;
+
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  cursor: pointer;
+}
+
+.todo_card {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 200px;
+  max-width: 300px;
+
+  gap: 10px;
+}
+
+.todo_card * {
+  margin: 0 auto;
+  padding: 0;
+}

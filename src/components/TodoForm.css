@@ -1,0 +1,19 @@
+.todo_form {
+  display: flex;
+  margin: 30px auto 0 auto;
+  gap: 20px;
+}
+
+.priority_text {
+  margin: 0;
+  padding: 0;
+}
+
+.priority_container {
+  display: flex;
+  gap: 10px;
+}
+
+.noData_text {
+  margin: 50px auto auto auto;
+}
