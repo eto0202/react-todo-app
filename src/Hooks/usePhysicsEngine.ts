@@ -24,6 +24,8 @@ export function usePhysicsEngine({
 
   // セットアップ用。初回のみ実行。
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
     // observerAPIを設定
     const setup = (width: number, height: number) => {
       const engine = Matter.Engine.create({
@@ -34,6 +36,7 @@ export function usePhysicsEngine({
       });
 
       matterInstanceRef.current = { engine };
+      const world = engine.world;
 
       const walls = [
         // 床
@@ -45,7 +48,24 @@ export function usePhysicsEngine({
         // 右壁
         Matter.Bodies.rectangle(width + 10, height / 2, 20, height, { isStatic: true }),
       ];
-      Matter.World.add(engine.world, walls);
+      Matter.World.add(world, walls);
+
+      // マウスオブジェクトを作成
+      const mouse = Matter.Mouse.create(container);
+
+      // マウス制約を作成
+      const mouseConstraint = Matter.MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.2, // 掴んだ時の硬さ
+          render: {
+            visible: false, // 掴んだ時の線
+          },
+        },
+      });
+
+      // マウス制約をワールドに追加
+      Matter.World.add(world, mouseConstraint);
 
       // 物理演算ループ
       let animationFramedId: number;
@@ -135,7 +155,7 @@ export function usePhysicsEngine({
 
       // Todoの優先度に応じてstyle設定を取得
       const style = priorityStyles[todo.priority] || priorityStyles.medium;
-      const bubbleRadius = calcBubbleRadius(todo.content, style.baseRadius, style.growthFactor);
+      const bubbleRadius = calcBubbleRadius(style.baseRadius, style.growthFactor);
 
       const body = Matter.Bodies.circle(initialX, initialY, bubbleRadius, {
         label: `bubble-${todo.id}`,
