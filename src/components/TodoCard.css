@@ -13,9 +13,9 @@
   border: transparent;
 
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(221, 221, 221, 0.5);
 
-  cursor: pointer;
+  cursor: default;
 }
 
 .todo_card {
@@ -61,13 +61,20 @@
 .done_btn {
   padding: 5px 10px;
   width: 120px;
-
+  background-color: #314496;
+  border: transparent;
+  border-radius: 10px;
   cursor: pointer;
+
+  transition: transform 0.1s ease-out;
+}
+
+.done_btn:active {
+  transform: scale(0.97);
 }
 
 .delete_btn {
   width: 25px;
-
   cursor: pointer;
 }
 
@@ -81,4 +88,9 @@
 
 .priority_high {
   font-size: 25px;
+}
+
+.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
 }

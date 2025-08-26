@@ -2,11 +2,43 @@
   display: flex;
   margin: 30px auto 0 auto;
   gap: 20px;
+
+  border-radius: 10px;
+}
+
+.form_input,
+.submit_btn,
+.custom_select_trigger {
+  font-size: 14px;
+  border: transparent;
+  padding: 10px;
+  border-radius: 10px;
+
+  background-color: #3d3d3d;
+}
+
+.submit_btn,
+.custom_select_trigger {
+  width: 100px;
+  cursor: pointer;
+}
+
+.form_input,
+.custom_select_trigger {
+  box-shadow: inset 0px 0px 6px 0px #000000;
+}
+
+.submit_btn {
+  background-color: #314496;
+  transition: transform 0.1s ease-out;
+}
+
+.submit_btn:active {
+  transform: scale(0.97);
 }
 
 .priority_text {
-  margin: 0;
-  padding: 0;
+  margin: auto;
 }
 
 .priority_container {

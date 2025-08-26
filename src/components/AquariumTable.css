@@ -6,4 +6,10 @@
 
   margin: 20px 0 0 0;
   padding: 0;
+
+  background-color: #0f0f0f;
+
+  border-radius: 20px;
+
+  box-shadow: inset 0px 0px 14px -6px #000000;
 }

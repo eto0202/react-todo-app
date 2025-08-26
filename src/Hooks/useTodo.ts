@@ -99,7 +99,15 @@ export function useTodos() {
   };
 
   const handleDelete = (id: string) => {
-    setTodoList((prevList) => prevList.filter((todo) => todo.id !== id));
+    if (window.confirm("本当に削除しますか？")) {
+      setTodoList((prevList) => prevList.filter((todo) => todo.id !== id));
+    }
+  };
+
+  const handleAllDelete = () => {
+    if (window.confirm("全て削除しますか？")) {
+      setTodoList([]);
+    }
   };
 
   const handleUpdatePositions = useCallback(
@@ -117,5 +125,12 @@ export function useTodos() {
     []
   );
 
-  return { todoList, handleAddTodo, handleToggleComplete, handleDelete, handleUpdatePositions };
+  return {
+    todoList,
+    handleAddTodo,
+    handleToggleComplete,
+    handleDelete,
+    handleAllDelete,
+    handleUpdatePositions,
+  };
 }

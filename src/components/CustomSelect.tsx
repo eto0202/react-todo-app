@@ -20,11 +20,10 @@ export function CustomSelect({ options, value, onChange, placeholder }: CustomSe
     <Select.Root value={value} onValueChange={onChange}>
       <Select.Trigger className="custom_select_trigger">
         <Select.Value placeholder={placeholder}></Select.Value>
-        <Select.Icon className="select_icon"></Select.Icon>
       </Select.Trigger>
 
       <Select.Portal>
-        <Select.Content className="custom_select_content" position="popper">
+        <Select.Content className="custom_select_content" position="popper" sideOffset={4}>
           <Select.ScrollUpButton></Select.ScrollUpButton>
 
           <Select.Viewport className="custom_select_content_list">
